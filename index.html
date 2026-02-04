@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>BFH · Character Codex</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Warm Ivory Theme */
+      --bg0:#fbf3e6;
+      --bg1:#fff9f0;
+      --bg2:#f4e6d3;
+
+      --ink:rgba(28,22,16,.92);
+      --muted:rgba(28,22,16,.62);
+
+      --c1:#b8832a;
+      --c2:#c86b3c;
+      --c3:#8b5a2b;
+
+      --line:rgba(28,22,16,.12);
+
+      --shadow: 0 18px 70px rgba(34,22,10,.20);
+      --shadow2: 0 10px 34px rgba(34,22,10,.14);
+
+      --r:22px;
+      --max:1200px;
+
+      --sans:"IBM Plex Sans KR", system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
+      --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+
+      /* layout density */
+      --padX: 14px;
+      --gap: 10px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--ink);
+      font-family:var(--sans);
+      overflow-x:hidden;
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(900px 520px at 12% 6%, rgba(184,131,42,.18), transparent 60%),
+        radial-gradient(900px 520px at 90% 12%, rgba(200,107,60,.14), transparent 62%),
+        radial-gradient(900px 640px at 52% 110%, rgba(139,90,43,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg0) 55%, var(--bg2));
+    }
+    img{max-width:100%;display:block}
+    button,input{font:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 var(--padX)}
+
+    /* paper grain */
+    .fx-grain{
+      pointer-events:none;
+      position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+      opacity:.11;
+      z-index:2;
+    }
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(255,249,240,.90), rgba(255,249,240,.52));
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 6px 20px rgba(28,22,16,.10);
+    }
+    .top{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding: 12px 0 10px;
+    }
+    .brand{min-width:0; display:flex; align-items:center; gap:10px;}
+    .seal{
+      width:40px; height:40px;
+      border-radius:16px;
+      border:1px solid rgba(28,22,16,.12);
+      background:
+        radial-gradient(14px 14px at 30% 28%, rgba(184,131,42,.55), transparent 65%),
+        radial-gradient(14px 14px at 76% 76%, rgba(200,107,60,.45), transparent 65%),
+        rgba(255,255,255,.58);
+      box-shadow: 0 0 18px rgba(184,131,42,.14), 0 0 16px rgba(200,107,60,.10), var(--shadow2);
+      flex:0 0 auto;
+    }
+    .titleBox{min-width:0}
+    .title{
+      margin:0;
+      font-family:var(--mono);
+      font-weight:600;
+      letter-spacing:.06em;
+      font-size: 13px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      color: rgba(28,22,16,.92);
+    }
+    .title .g{
+      background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .sub{
+      margin-top:5px;
+      font-family:var(--mono);
+      font-size:11px;
+      color: rgba(28,22,16,.60);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .pillCount{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(28,22,16,.12);
+      background: rgba(255,255,255,.68);
+      box-shadow: var(--shadow2);
+      white-space:nowrap;
+    }
+
+    /* Toolbar */
+    .toolbar{
+      margin: 8px 0 10px;
+      display:grid;
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+    .searchWrap{
+      position:relative;
+      border-radius: 18px;
+      border:1px solid rgba(28,22,16,.14);
+      background: rgba(255,255,255,.68);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .searchWrap::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: linear-gradient(90deg, rgba(184,131,42,.14), rgba(200,107,60,.12), rgba(139,90,43,.10));
+      opacity:.8;
+      filter: blur(18px);
+      pointer-events:none;
+    }
+    .searchIcon{
+      position:absolute; left:12px; top:50%;
+      transform: translateY(-50%);
+      width:18px; height:18px;
+      opacity:.65;
+      pointer-events:none;
+    }
+    .search{
+      position:relative;
+      width:100%;
+      padding: 12px 14px 12px 40px;
+      border:0;
+      outline:none;
+      background: transparent;
+      color: rgba(28,22,16,.92);
+      font-size: 14px;
+    }
+    .search::placeholder{color: rgba(28,22,16,.45)}
+
+    .chips{
+      display:flex; gap:8px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 2px 2px 4px;
+      scroll-snap-type: x mandatory;
+    }
+    .chips::-webkit-scrollbar{height:8px}
+    .chips::-webkit-scrollbar-thumb{background:rgba(28,22,16,.12); border-radius:999px}
+    .chip{
+      flex:0 0 auto;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 11px;
+      border-radius:999px;
+      border:1px solid rgba(28,22,16,.12);
+      background: rgba(255,255,255,.62);
+      color: rgba(28,22,16,.86);
+      font-family: var(--mono);
+      font-size:12px;
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+      scroll-snap-align: start;
+    }
+    .chip.active{
+      border-color: rgba(184,131,42,.34);
+      background: linear-gradient(135deg, rgba(184,131,42,.18), rgba(200,107,60,.12));
+      box-shadow: 0 0 18px rgba(184,131,42,.12);
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: linear-gradient(180deg, var(--c1), var(--c2), var(--c3));
+    }
+    @media (min-width: 900px){
+      .chips{overflow:visible; flex-wrap:wrap}
+    }
+
+    /* Section */
+    main.wrap{ padding-top: 8px; }
+    .sectionRow{
+      display:flex; justify-content:space-between; align-items:flex-end; gap:10px;
+      margin: 10px 0 6px;
+    }
+    .sectionRow h2{
+      margin:0;
+      font-family: var(--mono);
+      font-size:12px;
+      letter-spacing:.10em;
+      color: rgba(28,22,16,.82);
+    }
+    .hint{
+      font-family: var(--mono);
+      font-size:12px;
+      color: rgba(28,22,16,.58);
+      white-space:nowrap;
+    }
+
+    /* Panel + grid */
+    .panel{
+      border-radius: var(--r);
+      border: 1px solid rgba(28,22,16,.12);
+      background: rgba(255,255,255,.58);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .grid{
+      padding: 10px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--gap);
+    }
+    @media (min-width: 620px){
+      .grid{grid-template-columns: repeat(3, minmax(0, 1fr));}
+    }
+    @media (min-width: 1024px){
+      .grid{grid-template-columns: repeat(4, minmax(0, 1fr));}
+    }
+
+    /* Card */
+    .card{
+      border-radius: 18px;
+      border: 1px solid rgba(28,22,16,.12);
+      background: rgba(255,255,255,.70);
+      overflow:hidden;
+      cursor:pointer;
+      box-shadow: var(--shadow2);
+      padding:0;
+      text-align:left;
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      box-shadow: var(--shadow), 0 0 0 1px rgba(184,131,42,.12) inset;
+    }
+
+    .thumb{
+      position:relative;
+      aspect-ratio: 4 / 3;
+      overflow:hidden;
+      background: rgba(255,255,255,.55);
+      outline: 1px solid rgba(28,22,16,.10);
+      outline-offset: -1px;
+    }
+    .thumb::before{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 42%, rgba(28,22,16,.58) 100%);
+      pointer-events:none;
+      z-index:1;
+    }
+    .thumb::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(520px 220px at 50% 0%, rgba(184,131,42,.14), transparent 65%);
+      pointer-events:none;
+      z-index:1;
+    }
+    .thumb img{
+      width:100%; height:100%;
+      object-fit: cover;
+      object-position: center 18%;
+      filter: contrast(1.02) saturate(1.02) brightness(1.10);
+      transform: scale(1.01);
+    }
+
+    .sigil{
+      position:absolute;
+      left:10px; top:10px;
+      display:inline-flex;
+      align-items:center; gap:8px;
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid rgba(28,22,16,.14);
+      background: rgba(255,255,255,.74);
+      backdrop-filter: blur(10px);
+      font-family: var(--mono);
+      font-size:11px;
+      color: rgba(28,22,16,.88);
+      white-space:nowrap;
+      z-index:2;
+    }
+    .sigil .miniDot{
+      width:10px; height:10px;
+      border-radius:999px;
+      background: linear-gradient(180deg, var(--c1), var(--c2), var(--c3));
+    }
+
+    .meta{
+      padding: 10px;
+      display:grid;
+      gap: 4px;
+    }
+    .name{
+      margin:0;
+      font-weight:800;
+      font-size: 14.5px;
+      line-height:1.15;
+      word-break: keep-all;
+      color: rgba(28,22,16,.94);
+    }
+    .roleLine{
+      font-size: 12.5px;
+      color: rgba(28,22,16,.72);
+      line-height: 1.25;
+      word-break: keep-all;
+    }
+    .miniRow{
+      display:flex; justify-content:space-between; gap:10px; align-items:center;
+      margin-top:0;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: rgba(28,22,16,.62);
+    }
+    .kwRow{
+      margin-top:4px;
+      display:flex; gap:4px; flex-wrap:wrap;
+    }
+    .kw{
+      display:inline-flex; align-items:center;
+      padding:5px 8px;
+      border-radius:999px;
+      border:1px solid rgba(28,22,16,.10);
+      background: rgba(255,255,255,.68);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(28,22,16,.80);
+      white-space:nowrap;
+    }
+    .card:hover .name{
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .card:hover .sigil{
+      background: rgba(255,255,255,.86);
+    }
+
+    /* ✅ MOBILE FIX: 얼굴 가림 방지 */
+    @media (max-width: 520px){
+      /* 칩(소속·#)을 아래로 내려서 얼굴 안 가리게 */
+      .sigil{
+        top: auto;
+        bottom: 10px;
+        left: 10px;
+        padding: 6px 10px;
+        font-size: 11px;
+        background: rgba(255,255,255,.82);
+        border-color: rgba(28,22,16,.10);
+      }
+
+      /* 모바일에서는 얼굴이 위쪽에 몰리면 잘리니까 살짝 위로 당김 */
+      .thumb img{
+        object-position: center 12%;
+      }
+
+      /* 하단 가독성 위해 하단 그라데이션만 살짝 강화 */
+      .thumb::before{
+        background: linear-gradient(
+          180deg,
+          rgba(0,0,0,0) 35%,
+          rgba(28,22,16,.62) 100%
+        );
+      }
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0; z-index:100;
+      display:none;
+      background: rgba(28,22,16,.58);
+      backdrop-filter: blur(12px);
+      align-items:flex-end; justify-content:center;
+      padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+    }
+    .modal.show{display:flex}
+
+    .sheet{
+      width:100%;
+      max-width: 980px;
+      border-radius: 22px 22px 0 0;
+      border: 1px solid rgba(255,255,255,.40);
+      background: rgba(255,249,240,.94);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .handle{
+      width: 54px; height: 5px;
+      border-radius: 999px;
+      background: rgba(28,22,16,.22);
+      margin: 10px auto 0;
+    }
+    .sheetTop{
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(28,22,16,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.74), rgba(255,255,255,.38));
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:10px;
+      align-items:center;
+    }
+    .sheetTitle{
+      margin:0; min-width:0;
+      font-family: var(--mono);
+      font-weight:600;
+      font-size: 12px;
+      letter-spacing:.08em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      color: rgba(28,22,16,.92);
+    }
+    .sheetTitle .g{
+      background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .sheetBtns{display:flex; gap:8px}
+    .iconBtn{
+      border:1px solid rgba(28,22,16,.12);
+      background: rgba(255,255,255,.70);
+      color: rgba(28,22,16,.92);
+      border-radius: 14px;
+      cursor:pointer;
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 10px 10px;
+      min-width: 44px;
+      box-shadow: var(--shadow2);
+    }
+    .iconBtn.close{
+      min-width:56px;
+      border-color: rgba(184,131,42,.30);
+      background: rgba(255,255,255,.78);
+    }
+
+    .sheetBody{
+      padding: 12px;
+      display:grid;
+      gap:12px;
+    }
+
+    .artFrame{
+      border-radius: 18px;
+      border: 1px solid rgba(28,22,16,.12);
+      background: rgba(255,255,255,.70);
+      overflow:hidden;
+      box-shadow: var(--shadow2);
+    }
+    .art{
+      width:100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      object-position: center 18%;
+      filter: contrast(1.02) saturate(1.02) brightness(1.08);
+    }
+
+    .info{
+      border-radius: 18px;
+      border: 1px solid rgba(28,22,16,.12);
+      background: rgba(255,255,255,.70);
+      overflow:hidden;
+      box-shadow: var(--shadow2);
+    }
+    .infoTop{
+      padding: 11px 12px;
+      border-bottom: 1px solid rgba(28,22,16,.10);
+      display:flex; justify-content:space-between; gap:10px; align-items:center;
+    }
+    .infoLabel{
+      font-family: var(--mono);
+      font-size:12px;
+      letter-spacing:.10em;
+      color: rgba(28,22,16,.78);
+    }
+    .infoStamp{
+      font-family: var(--mono);
+      font-size:12px;
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid rgba(28,22,16,.10);
+      background: rgba(255,255,255,.76);
+      white-space:nowrap;
+      color: rgba(28,22,16,.78);
+    }
+    .infoBody{ padding: 12px; display:grid; gap:9px; }
+    .row{ display:grid; grid-template-columns: 92px 1fr; gap:10px; }
+    .k{ font-family: var(--mono); font-size:12px; color: rgba(28,22,16,.58); white-space:nowrap; }
+    .v{ font-size:14.5px; line-height:1.45; word-break:keep-all; color: rgba(28,22,16,.92); }
+    .v.mono{ font-family: var(--mono); }
+    .kwChips{ display:flex; gap:6px; flex-wrap:wrap; }
+
+    @media (min-width: 900px){
+      .modal{align-items:center; padding:16px;}
+      .sheet{border-radius: 26px;}
+      .handle{display:none}
+      .sheetBody{grid-template-columns: 1.05fr .95fr;}
+      .row{grid-template-columns: 110px 1fr;}
+      .infoBody{padding: 14px;}
+    }
+
+    footer{
+      padding: 14px 0 22px;
+      color: rgba(28,22,16,.58);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .foot{
+      border-top:1px solid rgba(28,22,16,.10);
+      padding-top: 12px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .card{transition:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="fx-grain"></div>
+
+  <header>
+    <div class="wrap">
+      <div class="top">
+        <div class="brand">
+          <div class="seal" aria-hidden="true"></div>
+          <div class="titleBox">
+            <p class="title"><span class="g">BFH</span> · Character Codex</p>
+            <div class="sub">Warm ivory · Mobile-dense · 2/3/4 Grid · 24</div>
+          </div>
+        </div>
+        <div class="pillCount" id="count">—</div>
+      </div>
+
+      <div class="toolbar">
+        <div class="searchWrap">
+          <svg class="searchIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="rgba(28,22,16,.70)" stroke-width="1.8"/>
+            <path d="M16.5 16.5 21 21" stroke="rgba(28,22,16,.70)" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <input class="search" id="q" placeholder="이름 / 직책 / MBTI / 키워드 검색" autocomplete="off" />
+        </div>
+
+        <div class="chips" id="chips">
+          <div class="chip active" data-f="ALL"><span class="dot"></span>ALL</div>
+          <div class="chip" data-f="신"><span class="dot"></span>신</div>
+          <div class="chip" data-f="황가"><span class="dot"></span>황가</div>
+          <div class="chip" data-f="귀족"><span class="dot"></span>귀족</div>
+          <div class="chip" data-f="기사단"><span class="dot"></span>기사단</div>
+          <div class="chip" data-f="교단"><span class="dot"></span>교단</div>
+          <div class="chip" data-f="마탑"><span class="dot"></span>마탑</div>
+          <div class="chip" data-f="상단"><span class="dot"></span>상단</div>
+          <div class="chip" data-f="마녀"><span class="dot"></span>마녀</div>
+          <div class="chip" data-f="길드"><span class="dot"></span>길드</div>
+          <div class="chip" data-f="마족"><span class="dot"></span>마족</div>
+          <div class="chip" data-f="엘프"><span class="dot"></span>엘프</div>
+          <div class="chip" data-f="드래곤"><span class="dot"></span>드래곤</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="sectionRow">
+      <h2>CODEX</h2>
+      <div class="hint" id="footHint">—</div>
+    </div>
+
+    <div class="panel">
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <footer>
+      <div class="foot">
+        <div>© <span id="year"></span> BFH</div>
+        <div>images: raw.githubusercontent.com</div>
+      </div>
+    </footer>
+  </main>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="캐릭터 도감">
+      <div class="handle" aria-hidden="true"></div>
+
+      <div class="sheetTop">
+        <p class="sheetTitle" id="mTitle"><span class="g">PROFILE</span></p>
+        <div class="sheetBtns">
+          <button class="iconBtn" id="prev" aria-label="이전">◀</button>
+          <button class="iconBtn" id="next" aria-label="다음">▶</button>
+          <button class="iconBtn close" id="close" aria-label="닫기">✕</button>
+        </div>
+      </div>
+
+      <div class="sheetBody">
+        <div class="artFrame">
+          <img class="art" id="mImg" alt="character illustration" />
+        </div>
+
+        <div class="info">
+          <div class="infoTop">
+            <div class="infoLabel">PROFILE</div>
+            <div class="infoStamp" id="mStamp">—</div>
+          </div>
+
+          <div class="infoBody">
+            <div class="row">
+              <div class="k">NAME</div>
+              <div class="v" id="mName">—</div>
+            </div>
+            <div class="row">
+              <div class="k">ROLE</div>
+              <div class="v" id="mRole">—</div>
+            </div>
+            <div class="row">
+              <div class="k">MBTI</div>
+              <div class="v mono" id="mMbti">—</div>
+            </div>
+            <div class="row">
+              <div class="k">ENNEA</div>
+              <div class="v mono" id="mEnne">—</div>
+            </div>
+            <div class="row">
+              <div class="k">KEYWORDS</div>
+              <div class="v">
+                <div class="kwChips" id="mKw"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ✅ BFH-3 이미지 베이스 (001.png ~ 024.png)
+    const BASE_IMG = "https://raw.githubusercontent.com/hiun575/BFH-3/refs/heads/main/";
+    const IMG = (n)=> `${BASE_IMG}${String(n).padStart(3,"0")}.png`;
+
+    const DATA = [
+      {i:1,  name:"시엘라", emoji:"🌟", role:"빛의여신",       mbti:"ENFJ", enne:"2w3", kw:["고요","균형"], faction:"신"},
+      {i:2,  name:"리베르나", emoji:"🕷️", role:"마왕",        mbti:"ENTJ", enne:"8w7", kw:["교만","위압"], faction:"마족"},
+      {i:3,  name:"카일라", emoji:"🗡️", role:"귀공마",        mbti:"ESTP", enne:"7w8", kw:["충동","공격"], faction:"마족"},
+      {i:4,  name:"스테리아", emoji:"👁️", role:"귀공마",      mbti:"ISTJ", enne:"5w6", kw:["냉철","통제"], faction:"마족"},
+      {i:5,  name:"모르카", emoji:"💜", role:"상위마족",           mbti:"ESFJ", enne:"2w3", kw:["열광","충성"], faction:"마족"},
+      {i:6,  name:"셀리아 루미니스", emoji:"🕊️", role:"성녀", mbti:"ISFJ", enne:"2w1", kw:["헌신","강인"], faction:"교단"},
+      {i:7,  name:"아델린 오르웰", emoji:"👑", role:"제1황녀", mbti:"ESTJ", enne:"1w2", kw:["엄격","위엄"], faction:"황가"},
+      {i:8,  name:"엘리시아 오르웰", emoji:"⚜️", role:"제2황녀", mbti:"ENTJ", enne:"8w7", kw:["야망","카리스마"], faction:"황가"},
+      {i:9,  name:"에렌트 레인폴드", emoji:"🦊", role:"공작",  mbti:"ENTP", enne:"3w4", kw:["계산","유연"], faction:"귀족"},
+      {i:10, name:"네실라 아릴라인", emoji:"🧭", role:"마탑주", mbti:"INTJ", enne:"5w4", kw:["이성","탐구"], faction:"마탑"},
+      {i:11, name:"메르시아 벨리온", emoji:"💼", role:"상단주", mbti:"ENFJ", enne:"3w2", kw:["전략","설득"], faction:"상단"},
+      {i:12, name:"벨카르 하르트", emoji:"🛡️", role:"대공",    mbti:"ISFJ", enne:"9w8", kw:["다정","온기"], faction:"귀족"},
+      {i:13, name:"아르모니 로젠벨", emoji:"🍷", role:"후작",  mbti:"ISTJ", enne:"6w5", kw:["철저","허당"], faction:"귀족"},
+      {i:14, name:"아스테라", emoji:"🔥", role:"드래곤",       mbti:"INTP", enne:"5w4", kw:["츤데레"], faction:"드래곤"},
+      {i:15, name:"리시라", emoji:"❄️", role:"드래곤",         mbti:"INFJ", enne:"1w9", kw:["인내","중재"], faction:"드래곤"},
+      {i:16, name:"벨로사 나가르", emoji:"🐍", role:"대마녀",  mbti:"ENTJ", enne:"4w5", kw:["집착","교활"], faction:"마녀"},
+      {i:17, name:"티에나 글림", emoji:"🕯️", role:"상급마녀",  mbti:"ISFP", enne:"6w7", kw:["불안","순응"], faction:"마녀"},
+      {i:18, name:"바르테안 카르민", emoji:"😾", role:"대신관", mbti:"INTJ", enne:"1w2", kw:["짜증","완벽"], faction:"교단"},
+      {i:19, name:"딘테아 마르셀라", emoji:"📜", role:"길드단장", mbti:"ESTJ", enne:"3w2", kw:["성숙","책임","자기관리"], faction:"길드"},
+      {i:20, name:"이레온 세피아", emoji:"🔮", role:"상급마법사", mbti:"ESFP", enne:"7w6", kw:["자유","감각","즉흥"], faction:"마탑"},
+      {i:21, name:"라우스트 린델", emoji:"⚔️", role:"백은기사단장", mbti:"ENTJ", enne:"8w9", kw:["냉정","침착","결단"], faction:"기사단"},
+      {i:22, name:"페이라", emoji:"🥀", role:"엘프여왕",       mbti:"INFP", enne:"9w1", kw:["온화","지혜","사색"], faction:"엘프"},
+      {i:23, name:"미엘란", emoji:"🐥", role:"엘프",           mbti:"ISFJ", enne:"2w1", kw:["성실","순수","헌신"], faction:"엘프"},
+      {i:24, name:"세르나", emoji:"🍃", role:"엘프",           mbti:"INTJ", enne:"5w6", kw:["실리","감성","분석"], faction:"엘프"},
+    ];
+
+    const $ = (id)=> document.getElementById(id);
+    const grid = $("grid");
+    const q = $("q");
+    const count = $("count");
+    const year = $("year");
+    const footHint = $("footHint");
+
+    let activeFaction = "ALL";
+
+    function escHTML(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function passFaction(c){
+      return activeFaction==="ALL" ? true : c.faction===activeFaction;
+    }
+
+    function passQuery(c){
+      const t = (q.value||"").trim().toLowerCase();
+      if(!t) return true;
+      const hay = [
+        c.name, c.emoji, c.role, c.faction, c.mbti, c.enne, c.kw.join(" ")
+      ].join(" ").toLowerCase();
+      return hay.includes(t);
+    }
+
+    function render(){
+      grid.innerHTML = "";
+      let shown = 0;
+
+      DATA.forEach((c, idx)=>{
+        if(!passFaction(c) || !passQuery(c)) return;
+        shown++;
+
+        const btn = document.createElement("button");
+        btn.className = "card";
+        btn.type = "button";
+        btn.dataset.idx = idx;
+
+        const kws = c.kw.slice(0,4).map(k=> `<span class="kw">${escHTML(k)}</span>`).join("");
+
+        btn.innerHTML = `
+          <div class="thumb">
+            <img loading="lazy" src="${IMG(c.i)}" alt="${escHTML(c.name)}">
+            <div class="sigil"><span class="miniDot"></span>${escHTML(c.faction)} · #${String(c.i).padStart(2,"0")}</div>
+          </div>
+          <div class="meta">
+            <p class="name">${escHTML(c.name)} ${escHTML(c.emoji)}</p>
+            <div class="roleLine">${escHTML(c.role)}</div>
+            <div class="miniRow">
+              <span>${escHTML(c.mbti)}</span>
+              <span>${escHTML(c.enne)}</span>
+            </div>
+            <div class="kwRow">${kws}</div>
+          </div>
+        `;
+
+        btn.addEventListener("click", ()=> openModal(idx));
+        grid.appendChild(btn);
+      });
+
+      count.textContent = `${shown} / ${DATA.length}`;
+      footHint.textContent = activeFaction==="ALL" ? "FILTER: ALL" : `FILTER: ${activeFaction}`;
+    }
+
+    // Chips
+    document.querySelectorAll(".chip").forEach(ch=>{
+      ch.addEventListener("click", ()=>{
+        document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));
+        ch.classList.add("active");
+        activeFaction = ch.dataset.f;
+        render();
+      });
+    });
+
+    q.addEventListener("input", render);
+
+    // Modal
+    const modal = $("modal");
+    const mTitle = $("mTitle");
+    const mImg = $("mImg");
+    const mStamp = $("mStamp");
+    const mName = $("mName");
+    const mRole = $("mRole");
+    const mMbti = $("mMbti");
+    const mEnne = $("mEnne");
+    const mKw = $("mKw");
+    const prev = $("prev");
+    const next = $("next");
+    const close = $("close");
+
+    let cur = 0;
+
+    function setModal(i){
+      cur = i;
+      const c = DATA[cur];
+
+      mTitle.innerHTML = `<span class="g">PROFILE</span> — ${escHTML(c.name)} ${escHTML(c.emoji)}`;
+      mImg.src = IMG(c.i);
+      mStamp.textContent = `${c.faction} · #${String(c.i).padStart(2,"0")}`;
+
+      mName.textContent = `${c.name} ${c.emoji}`;
+      mRole.textContent = c.role;
+      mMbti.textContent = c.mbti;
+      mEnne.textContent = c.enne;
+      mKw.innerHTML = c.kw.map(k=> `<span class="kw">${escHTML(k)}</span>`).join("");
+    }
+
+    function openModal(i){
+      setModal(i);
+      modal.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(){
+      modal.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    function prevFn(){ cur = (cur - 1 + DATA.length) % DATA.length; setModal(cur); }
+    function nextFn(){ cur = (cur + 1) % DATA.length; setModal(cur); }
+
+    prev.addEventListener("click", prevFn);
+    next.addEventListener("click", nextFn);
+    close.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+
+    // Keyboard
+    window.addEventListener("keydown", (e)=>{
+      if(!modal.classList.contains("show")) return;
+      if(e.key === "Escape") closeModal();
+      if(e.key === "ArrowLeft") prevFn();
+      if(e.key === "ArrowRight") nextFn();
+    });
+
+    // Swipe on modal image (mobile)
+    let sx = null;
+    mImg.addEventListener("touchstart", (e)=>{ sx = e.touches[0].clientX; }, {passive:true});
+    mImg.addEventListener("touchend", (e)=>{
+      if(sx===null) return;
+      const dx = e.changedTouches[0].clientX - sx;
+      if(Math.abs(dx) > 40){ dx > 0 ? prevFn() : nextFn(); }
+      sx = null;
+    }, {passive:true});
+
+    year.textContent = new Date().getFullYear();
+    render();
+  </script>
+</body>
+</html>
